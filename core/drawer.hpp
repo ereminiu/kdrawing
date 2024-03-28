@@ -2,24 +2,24 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 
-#include <bits/stdc++.h>
 #include "polygon.hpp"
+
+#include <bits/stdc++.h>
 
 using namespace std;
 using namespace cv;
 
+#ifndef PRO_HC_EM_DRAWER_H
+#define PRO_HC_EM_DRAWER_H
+
 class Drawer {
 public:
-    Drawer(Mat &image) :_img(&image) {
-        cout << "making drawer" << endl;
-    }
-    
-    void DrawPolygons(vector<Polygon> polygons);
+    Drawer(Mat img);
+
+    void DrawPolygons(vector<Polygon> p);
 
 private:
-    Mat *_img;
-
-    void drawPolygon(Polygon p);
-
-    vector<Point> getPoints(Polygon polygon);
+    Mat _img;
 };
+
+#endif

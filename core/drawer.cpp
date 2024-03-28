@@ -2,29 +2,24 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 
-#include <bits/stdc++.h>
 #include "polygon.hpp"
 #include "drawer.hpp"
+
+#include <bits/stdc++.h>
 
 using namespace std;
 using namespace cv;
 
+Drawer::Drawer(Mat img) :_img(img) {
+}
+
 void Drawer::DrawPolygons(vector<Polygon> polygons) {
-
-}
-
-void Drawer::drawPolygon(Polygon p) {
-    auto points = getPoints(p);
     Mat overlay;
-    this->_img->copyTo(overlay);
-    fillPoly(overlay, points, Scalar(p.blue, p.green, p.red));
-}
+    this->_img.copyTo(overlay);
 
-// TODO: перенести на слой полигона
-vector<Point> Drawer::getPoints(Polygon polygon) {
-    vector<Point> points(3);
-    for (int i = 0; i < 3; i++) {
-        points[i] = Point(polygon.xCoord[i], polygon.yCoord[i]);
+    for (Polygon p : polygons) {
+        auto points = p.getPoints();
+        fillPoly(overlay, points, Scalar(p.blue, p.green, p.red) * p.alpha, LINE_8);
+        addWeighted(overlay, p.alpha, this->_img, 1-p.alpha, 0, this->_img);
     }
-    return points;
 }

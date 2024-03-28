@@ -2,9 +2,8 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 
-#include "core/compare.hpp"
-#include "core/drawer.hpp"
 #include "core/polygon.hpp"
+#include "core/drawer.hpp"
 
 #include <bits/stdc++.h>
 
@@ -20,8 +19,13 @@ void drawPolygon(Mat img, const vector<Point> &points, int red, int green, int b
 int main() {
     Mat image = Mat::zeros(H, W, CV_8UC3);
 
-    Drawer drawer(image);
-    Comparator compare(image);
+    vector<Polygon> polygons = {
+        Polygon(0, 0, 0, H, W, 0, 255, 0, 0, 0.5),
+        Polygon(W, H, W, 0, 0, 0, 0, 0, 255, 0.5)
+    };
+
+    Drawer d(image);
+    d.DrawPolygons(polygons);
 
     imshow("Aboba", image);
     waitKey(0);
@@ -53,6 +57,6 @@ void drawPolygon(Mat img, const vector<Point> &points, int red, int green, int b
     Mat overlay;
     img.copyTo(overlay);
 
-    fillPoly(overlay, points, Scalar(blue, green, red) * alpha, LINE_8);
+    fillPoly(overlay, points, Scalar(blue, green, red), LINE_8);
     addWeighted(overlay, alpha, img, 1-alpha, 0, img);
 }

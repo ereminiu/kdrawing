@@ -4,6 +4,7 @@
 
 #include "core/polygon.hpp"
 #include "core/drawer.hpp"
+#include "core/compare.hpp"
 
 #include <bits/stdc++.h>
 
@@ -11,13 +12,13 @@ using namespace std;
 using namespace cv;
 
 const string filepath = "evelinushka.jpg";
-const int H = 400;
-const int W = 500;
+const int H = 500;
+const int W = 300;
 
 void drawPolygon(Mat img, const vector<Point> &points, int red, int green, int blue, float alpha);
 
 int main() {
-    Mat image = Mat::zeros(H, W, CV_8UC3);
+    Mat image = Mat::zeros(H, W, CV_8UC4);
 
     vector<Polygon> polygons = {
         Polygon(0, 0, 0, H, W, 0, 255, 0, 0, 0.5),
@@ -27,8 +28,33 @@ int main() {
     Drawer d(image);
     d.DrawPolygons(polygons);
 
+    Mat anotherImage = Mat::zeros(H, W, CV_8UC4);
+    vector<Point> other = {
+        Point(0, 0), 
+        Point(0, H),
+        Point(W, 0)
+    };
+    drawPolygon(anotherImage, other, 255, 0, 0, 0.5);
+    other = {
+        Point(W, H),
+        Point(W, 0),
+        Point(0, 0)
+    };
+    drawPolygon(anotherImage, other, 0, 0, 255, 0.5);
+
+    Compare compare(image);
+    cout << "Loss: " <<  compare.Loss(anotherImage) << endl;
+
     imshow("Aboba", image);
     waitKey(0);
+
+    imshow("Aboba", anotherImage);
+    waitKey(0);
+}
+
+void drawPolygon(Mat img, const vector<Point> &points, int red, int green, int blue, float alpha) {
+    fillPoly(img, points, Scalar(blue, green, red) * alpha, LINE_8);
+    // addWeighted(overlay, alpha, img, 1-alpha, 0, img);
 }
 
 // int main() {
@@ -52,11 +78,3 @@ int main() {
 
 //     return 0;
 // }
-
-void drawPolygon(Mat img, const vector<Point> &points, int red, int green, int blue, float alpha) {
-    Mat overlay;
-    img.copyTo(overlay);
-
-    fillPoly(overlay, points, Scalar(blue, green, red), LINE_8);
-    addWeighted(overlay, alpha, img, 1-alpha, 0, img);
-}

@@ -5,6 +5,7 @@
 #include "core/polygon.hpp"
 #include "core/drawer.hpp"
 #include "core/compare.hpp"
+#include "core/pro_hc_em.hpp"
 
 #include <bits/stdc++.h>
 
@@ -12,44 +13,41 @@ using namespace std;
 using namespace cv;
 
 const string filepath = "evelinushka.jpg";
-const int H = 500;
-const int W = 300;
+// const int H = 500;
+// const int W = 300;
+
+const int m = 50;
+const int maxFE = 100;
 
 void drawPolygon(Mat img, const vector<Point> &points, int red, int green, int blue, float alpha);
 
 int main() {
-    Mat image = Mat::zeros(H, W, CV_8UC4);
+    Mat source = imread(filepath);
+    int W = source.cols;
+    int H = source.rows;
+    
+    Mat img = Mat::zeros(H, W, CV_8UC3);
+    Drawer drawer(img);
+    Compare comparator(img);
+    ProHillClimbingEnergyMap solver(m, maxFE, source, drawer, comparator);
 
-    vector<Polygon> polygons = {
-        Polygon(0, 0, 0, H, W, 0, 255, 0, 0, 0.5),
-        Polygon(W, H, W, 0, 0, 0, 0, 0, 255, 0.5)
-    };
+    solver.Solve();
 
-    Drawer d(image);
-    d.DrawPolygons(polygons);
-
-    Mat anotherImage = Mat::zeros(H, W, CV_8UC4);
-    vector<Point> other = {
-        Point(0, 0), 
-        Point(0, H),
-        Point(W, 0)
-    };
-    drawPolygon(anotherImage, other, 255, 0, 0, 0.5);
-    other = {
-        Point(W, H),
-        Point(W, 0),
-        Point(0, 0)
-    };
-    drawPolygon(anotherImage, other, 0, 0, 255, 0.5);
-
-    Compare compare(image);
-    cout << "Loss: " <<  compare.Loss(anotherImage) << endl;
-
-    imshow("Aboba", image);
+    imshow("Aboba", img);
     waitKey(0);
 
-    imshow("Aboba", anotherImage);
-    waitKey(0);
+    // Mat image = Mat::zeros(H, W, CV_8UC3);
+
+    // vector<Polygon> polygons = {
+    //     Polygon(0, 0, 0, H, W, 0, 255, 0, 0, 0.5),
+    //     Polygon(W, H, W, 0, 0, 0, 0, 0, 255, 0.5)
+    // };
+
+    // Drawer d(image);
+    // d.DrawPolygons(polygons);
+
+    // imshow("Aboba", image);
+    // waitKey(0);
 }
 
 void drawPolygon(Mat img, const vector<Point> &points, int red, int green, int blue, float alpha) {

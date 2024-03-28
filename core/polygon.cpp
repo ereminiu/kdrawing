@@ -9,6 +9,9 @@ Polygon::Polygon(int x1, int y1, int x2, int y2, int x3, int y3, int r, int g, i
     yCoord = vector<int>{y1, y2, y3};
 }
 
+Polygon::Polygon() {
+}
+
 vector<Point> Polygon::getPoints() {
     vector<Point> points(3);
     for (int i = 0; i < 3; i++) {

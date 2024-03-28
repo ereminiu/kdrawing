@@ -18,6 +18,7 @@ public:
     float alpha;
 
     Polygon(int x1, int y1, int x2, int y2, int x3, int y3, int r, int g, int b, float a);
+    Polygon();
 
     vector<Point> getPoints(); 
 };

@@ -31,15 +31,21 @@ private:
     Drawer drawer;
     Compare comparator;
 
+    vector<Polygon> solution;
+    vector<vector<int>> energyMap;
+
+    // random
     mt19937 gen;
     random_device rd;
 
     Polygon generatePolygon();
-    void mutate_color(int i);
-    void mutate_vertex(int i);
+    void mutateColor(int i);
+    void mutateVertex(int i);
     int randInt(int left, int right);
-    float randFloat();
+    float randFloat(float left, float right);
+    int randomChoice(vector<float> prob);
     bool onTheSameLine(int x1, int y1, int x2, int y2, int x3, int y3);
+    void initEnergyMap();
     int64 getLoss();
     void draw();
 };

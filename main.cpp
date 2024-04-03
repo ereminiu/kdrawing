@@ -10,14 +10,16 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+using namespace std::chrono;
 using namespace cv;
 
-const string filepath = "evelinushka.jpg";
+// const string filepath = "evelinushka.jpg";
+const string filepath = "evelinushka_short_2.png";
 // const int H = 500;
 // const int W = 300;
 
-const int m = 50;
-const int maxFE = 100;
+const int m = 1000;
+const int maxFE = 500;
 
 void drawPolygon(Mat img, const vector<Point> &points, int red, int green, int blue, float alpha);
 
@@ -31,7 +33,13 @@ int main() {
     Compare comparator(img);
     ProHillClimbingEnergyMap solver(m, maxFE, source, drawer, comparator);
 
+    auto start = high_resolution_clock::now();
+
     solver.Solve();
+
+    auto stop = high_resolution_clock::now();
+
+    cout << "Time elapsed: " << duration_cast<microseconds>(stop - start).count() << endl;
 
     imshow("Aboba", img);
     waitKey(0);

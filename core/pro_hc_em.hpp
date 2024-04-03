@@ -45,6 +45,7 @@ private:
     float randFloat(float left, float right);
     int randomChoice(vector<float> prob);
     bool onTheSameLine(int x1, int y1, int x2, int y2, int x3, int y3);
+    void initPolygon(Polygon &p);
     void initEnergyMap();
     int64 getLoss();
     void draw();
